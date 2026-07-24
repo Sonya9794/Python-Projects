@@ -1,0 +1,84 @@
+import os
+import time
+
+timer_done = False
+
+# Statistics
+user_total_sessions = 0
+user_total_time = 0
+user_longest_session = "None"
+user_longest_time = 0
+
+if not os.path.exists('study_timer_log.txt'):
+    with open(os.path.join(os.path.dirname(__file__), 'study_timer_log.txt'), 'a') as study_log:
+        study_log.write("Study Timer Log\n\n")
+        # To generate this file in the same folder as the python file, you can use the following code:
+        # with open(os.path.join(os.path.dirname(__file__), 'study_timer_log.txt'), 'a') as study_log:
+
+def study_timer(subject, duration):
+        print(f"Studying {subject} for {duration} minutes.")
+        time.sleep(duration*60)
+
+        if duration == 1:
+            print(f"Time's up! You have finished studying {subject} for {duration} minute.")
+        else:
+            print(f"Time's up! You have finished studying {subject} for {duration} minutes.")
+
+def statistics(total_sessions, total_time, longest_session, longest_time):
+    print(f"Great job! Here are some statistics:")
+    time.sleep(1)
+    print(f"You studied for a total of {total_time:.2f} minutes across {total_sessions} sessions.")
+    time.sleep(0.5)
+    print(f"Your longest study session was {longest_time:.2f} minutes for the subject: {longest_session}.")
+    time.sleep(0.5)
+    print(f"Your average time spent per session was {total_time / total_sessions:.2f} minutes.")
+    time.sleep(1)
+
+
+user_subject = input("Enter the subject you want to study: ")
+user_subject = user_subject.strip().lower()
+
+
+while not timer_done:
+    user_duration = input("Enter the number of minutes you want to study: ")
+    user_duration = float(user_duration.strip())
+
+    if user_duration > 0:
+        study_timer(user_subject, user_duration)
+
+        user_total_sessions += 1
+        user_total_time += user_duration
+        if user_duration > user_longest_time:
+             user_longest_time = user_duration
+             user_longest_session = user_subject
+
+        with open(os.path.join(os.path.dirname(__file__), 'study_timer_log.txt'), 'a') as study_log:
+            study_log.write(f"Studied {user_subject} for {user_duration} minutes.\n\n")
+
+        time.sleep(1)
+        repeat = input("Do you want to set another timer? (yes/no): ")
+
+        if repeat.strip().lower() == "no":
+            timer_done = True
+        else:
+            time.sleep(0.5)
+            user_subject = input("Enter the next subject you want to study: ")
+            user_subject = user_subject.strip().lower()
+    else:
+        print("Please enter a valid duration greater than 0 minutes.")
+
+
+time.sleep(1)
+statistics(user_total_sessions, user_total_time, user_longest_session, user_longest_time)
+
+read = input("Do you want to read the study log? (yes/no): ")
+if read.strip().lower() == "yes":
+    with open(os.path.join(os.path.dirname(__file__), 'study_timer_log.txt'), 'r') as study_log:
+        print()
+        print(f"\n{study_log.read()}")
+    time.sleep(1)
+
+print("Keep up the good work!")
+time.sleep(1)
+print("Happy studying!")
+time.sleep(1)

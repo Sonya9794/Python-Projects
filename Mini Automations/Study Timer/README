@@ -1,0 +1,23 @@
+Study Timer V1
+
+Features
+- Study timer
+- Multiple study sessions
+- Session statistics
+- Sessions saved to a text file
+- Reads out study log
+
+
+Concepts Learned
+- Functions
+- Loops
+- Boolean
+- Global variables
+- File handling
+- Some context managers
+- Time module
+- Accumulators
+- Running maximums
+- String formatting
+
+Date completed: 7-24-2026

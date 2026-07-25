@@ -1,0 +1,4 @@
+math
+english
+romanian
+physics

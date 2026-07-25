@@ -1,0 +1,160 @@
+import os
+import time
+import random
+
+exit_main = False
+exit_selection = False
+
+flashcard_sets_path = os.path.join(os.path.dirname(__file__), 'flashcard_sets.txt')
+
+def create_flashcard_set(subject):
+    set_name = f"{subject.strip().lower()}_flashcards"
+    if not os.path.exists(os.path.join(os.path.dirname(__file__), (f'{set_name}.txt'))):
+        with open(os.path.join(os.path.dirname(__file__), (f"{set_name}.txt")), 'a') as set_name:
+            None
+        with open(flashcard_sets_path, 'a') as flashcard_sets:
+            flashcard_sets.write(f"{subject.strip().lower()}\n")
+
+def add_flashcard(dictionary, question, answer):
+    with open(os.path.join(os.path.dirname(__file__), (f"{dictionary}.txt")), 'a') as dictionary:
+        dictionary.write(f"{question}|{answer}\n")
+    # dictionary["flashcard_question"].append(question)
+    # dictionary["flashcard_answer"].append(answer)
+
+def random_flashcards(dictionary, flash_count, question_count):
+    card_numbers = random.sample(range(0, flash_count), question_count)
+    number_correct = 0
+    with open(os.path.join(os.path.dirname(__file__), (f"{dictionary}.txt")), 'r') as dictionary:
+        for i, line in enumerate(dictionary):
+            if i in card_numbers:
+                card = line.split("|")
+                card_question = card[0]
+                card_answer = card[1]
+
+                attempted_answer = input(f"\nWhat is the answer to \"{card_question}\"? ")
+
+                if str(attempted_answer).strip().lower() == str(card_answer).strip().lower():
+                    print("Correct!")
+                    number_correct += 1
+                else: 
+                    print(f"Incorrect! The correct answer is {card_answer.strip()}.\n")
+
+                time.sleep(0.5)
+
+        print(f"\nYou answered {number_correct} questions correctly, with an overall score of {round(100*number_correct/question_count, 2)}%. Congrats!")
+
+def count_flashcards(dictionary):
+    with open(os.path.join(os.path.dirname(__file__), (f"{dictionary}.txt")), 'r') as dictionary:
+        count = 0
+        for line in dictionary:
+            if line != '\n':
+                count += 1
+        return count
+
+def check_set_existence():
+    with open(flashcard_sets_path, 'r') as flashcard_sets:
+        for line in flashcard_sets:
+                if not os.path.exists(os.path.join(os.path.dirname(__file__), (f'{line.strip().lower()}_flashcards.txt'))):
+                    with open(os.path.join(os.path.dirname(__file__), (f'{line.strip()}_flashcards.txt')), 'w') as line:
+                        None
+
+    
+
+if not os.path.exists(flashcard_sets_path):
+    with open(flashcard_sets_path, 'x') as flashcard_sets:
+        None
+
+
+#############################################
+
+
+print("Hello!")
+time.sleep(0.5)
+
+while not exit_main:
+    check_set_existence()
+
+    print("What would you like to do?")
+    time.sleep(0.75)
+    print("\nA. Add a flashcard")
+    time.sleep(0.1)
+    print("B. Practice flashcards")
+    time.sleep(0.1)
+    print("C. Create a new set")
+    time.sleep(0.1)
+    print("D. Exit")
+    time.sleep(0.5)
+    requested_action = input("\nType the letter corresponding to your desired action: ").strip().lower()
+
+    if not requested_action == 'a' and not requested_action == 'b':
+        exit_selection = True
+
+    while not exit_selection:
+
+        print(f"Here are your flashcard sets:\n")
+        time.sleep(0.5)
+
+        with open(flashcard_sets_path, 'r') as flashcard_sets:
+            available_sets = [line.strip().lower() for line in flashcard_sets]
+        for i in available_sets:
+            print(i.capitalize())
+            time.sleep(0.1)
+
+        requested_dictionary = input("\nSelect a flashcard set: ").strip().lower()
+
+        if requested_dictionary not in available_sets:
+            time.sleep(0.5)
+            print("\nPlease select a valid flashcard set!")
+            time.sleep(0.5)
+        else:
+            for i in available_sets:
+                if requested_dictionary.strip().lower() == i.strip().lower():
+                    requested_dictionary = f"{requested_dictionary}_flashcards"
+                    exit_selection = True
+        
+    exit_selection = False
+
+    if requested_action == 'a':
+        requested_question = input("What question do you want to add?: ")
+        requested_answer = input("What is the answer to the question you have added?: ")
+        add_flashcard(requested_dictionary, requested_question, requested_answer)
+        print("Your question has been added!")
+        time.sleep(0.5)
+
+    elif requested_action == 'b':
+        flashcard_count = count_flashcards(requested_dictionary)
+
+        if flashcard_count > 0:
+            requested_number = int(input("How many questions do you want to do? ").strip())
+
+            if requested_number > 0 and requested_number <= flashcard_count:
+                random_flashcards(requested_dictionary, flashcard_count,requested_number)
+            elif requested_number < 0:
+                print("Pick a number greater than 0!")
+            else:
+                print(f"This flashcard set has {flashcard_count} cards. Add more cards to it or select a smaller number!")
+        else:
+            print("This flashcard set is currently empty! Add flashcards first.")
+        time.sleep(0.5)
+
+    elif requested_action == 'c':
+        requested_subject = input("What subject would you like to make a flashcard set for?: ")
+        file_name = (f"{requested_subject.strip().lower()}_flashcards.txt")
+
+        if not os.path.exists(os.path.join(os.path.dirname(__file__), file_name)):
+            create_flashcard_set(requested_subject)
+            print("Your flashcard set has been created!")
+        else:
+            print("This set already exists!")
+        time.sleep(0.5)
+
+
+
+    stop_here = input("\nStop here? (Y/N): ").strip().lower()
+    if stop_here == 'y':
+        print()
+        exit_main = True
+    else:
+        exit_main = False
+        print("\nAlright, let's keep going!")
+        time.sleep(0.5)

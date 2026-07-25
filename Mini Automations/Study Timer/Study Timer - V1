@@ -9,7 +9,7 @@ user_total_time = 0
 user_longest_session = "None"
 user_longest_time = 0
 
-if not os.path.exists('study_timer_log.txt'):
+if not os.path.exists(os.path.join(os.path.dirname(__file__), 'study_timer_log.txt')):
     with open(os.path.join(os.path.dirname(__file__), 'study_timer_log.txt'), 'a') as study_log:
         study_log.write("Study Timer Log\n\n")
         # To generate this file in the same folder as the python file, you can use the following code:

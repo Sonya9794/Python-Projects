@@ -2,3 +2,5 @@ Study Timer Log
 
 Studied math for 0.01 minutes.
 
+Study Timer Log
+

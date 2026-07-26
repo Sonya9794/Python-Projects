@@ -1,0 +1,193 @@
+import time
+import os
+import csv
+
+data_path = os.path.join(os.path.dirname(__file__), 'expense_data.txt')
+
+exit_main = False
+exit_date = False
+
+def add_expense(date, category, description, amount):
+    with open(data_path, 'a') as expense_data:
+        expense_data.write(f"{date.strip().lower()}|{category.strip().lower()}|{description.strip().lower()}|{amount.strip()}\n")
+        time.sleep(0.5)
+        print("\nYour expense has been logged!\n")
+
+def view_expenses():
+    expense_count = 1
+
+    with open(data_path, 'r') as expense_data:
+        for line in expense_data:
+            if line != "\n":
+                expense_details = line.split("|")
+
+                expense_date = expense_details[0]
+                expense_category = expense_details[1].capitalize()
+                expense_description = expense_details[2].capitalize()
+                expense_amount = int(expense_details[3])
+
+                print(f"{expense_count}. {expense_date}: ${expense_amount} \nCategory: {expense_category}\nDescription: {expense_description}\n")
+                time.sleep(0.1)
+
+                expense_count += 1
+
+def expenses_summary():
+    total_items = 0
+    total_spent = 0
+    largest_expense = ['01/01/0000','None','None',0]
+
+    with open(data_path, 'r') as expense_data:
+        for line in expense_data:
+            if line != "\n":
+                expense_details = line.split("|")
+
+                total_items += 1
+                total_spent += float(expense_details[3])
+
+                largest_cost = largest_expense[3]
+
+
+                if float(expense_details[3]) > float(largest_cost):
+                    largest_expense = expense_details
+
+        largest_cost = largest_expense[3]
+
+        print(f"\nHere is your spending summary:\n")
+        time.sleep(0.5)
+        print(f"Total expenses: {total_items}")
+        time.sleep(0.25)
+        print(f"Total spent: ${round(total_spent,2)}")
+        time.sleep(0.25)
+        print(f"Largest Expense: {largest_expense[1].capitalize().strip()} - {largest_expense[2].capitalize().strip()} (${round(float(largest_cost),2)} spent on {largest_expense[0]}.)\n")
+        time.sleep(0.5)
+        print("-- End of log --\n")
+
+def categorical_summary():
+    category_dict = {    }
+    print("\n Here are your total costs by category:\n")
+
+    with open(data_path, 'r') as expense_data:
+        for line in expense_data:
+            expense_details = line.split("|")
+            category = expense_details[1].strip().lower()
+
+            if category in category_dict:
+                category_dict[category] += float(expense_details[3])
+            else:
+                category_dict[category] = float(expense_details[3])
+
+        for category, total in category_dict.items():
+            print(f"{category.capitalize().strip()}: ${round(total, 2)}")
+            time.sleep(0.1)
+
+    time.sleep(0.5)
+    print("\n -- End of log -- \n")
+
+
+
+
+if not os.path.exists(data_path):
+    with open(data_path, 'w') as expense_data:
+        None
+
+
+
+#####
+
+
+
+print("Welcome to your expense tracker!")
+
+while not exit_main:
+
+    time.sleep(0.5)
+    print("What would you like to do?\n")
+    time.sleep(0.5)
+    print("A. Add an expense")
+    time.sleep(0.1)
+    print("B. View all expenses")
+    time.sleep(0.1)
+    print("C. View expense summaries")
+    time.sleep(0.1)
+    print("D. Export data as CSV")
+    time.sleep(0.1)
+    print("E. Exit")
+    time.sleep(0.5)
+    requested_action = input("\nEnter the letter corresponding to your desired action: ").strip().lower()
+
+
+    if requested_action == 'a':
+
+        while not exit_date:
+            requested_date = input("What date did this expense occur on (MM/DD/YY)?: ")
+            confirm_valid = requested_date.split("/")
+
+            if not 0<int(confirm_valid[0])<13 or not 0<int(confirm_valid[1])<32:
+                time.sleep(0.5)
+                print("\nPlease enter a valid date!\n")
+                time.sleep(0.5)
+            else:
+                exit_date = True
+
+        exit_date = False
+
+        requested_amount = input(f"How much did you spend?: $").strip()
+        requested_category = input(f"What category was this expense for?: ").strip().lower()
+        requested_description = input(f"Enter a description: ").strip().lower()
+        time.sleep(0.5)
+        add_expense(requested_date, requested_category, requested_description, requested_amount)
+        time.sleep(0.5)
+
+    elif requested_action == 'b':
+        print("Here are your expenses!\n")
+        time.sleep(0.5)
+        view_expenses()
+        time.sleep(0.5)
+        print("-- End of log --\n")
+        time.sleep(1)
+
+    elif requested_action == 'c':
+
+        print("Here are the available reports:\n")
+        time.sleep(0.5)
+        print("1. Overall")
+        time.sleep(0.1)
+        print("2. By category")
+        time.sleep(0.5)
+
+        requested_action = (input("\nType the number corresponding to the summary you'd like to see (or type a different number to exit): "))
+
+        if int(requested_action) == 1:
+            expenses_summary()
+            time.sleep(1)
+        if int(requested_action) == 2:
+            categorical_summary()
+            time.sleep(1)
+
+    elif requested_action == 'd':
+        with open(data_path, 'r') as data:
+            with open(os.path.join(os.path.dirname(__file__), 'expense_data.csv'), 'w', newline = '') as file:
+                writer = csv.writer(file, delimiter = ',', quotechar='"')
+                for line in data:
+                    expense_data = line.strip().split("|")
+                    writer.writerow(expense_data)
+
+
+
+    quit_now = input("Quit here (Y/N)?: ").strip().lower()
+    if quit_now == 'y':
+        exit_main = True
+    else:
+        print("get those bucks in twin \U0001F911 \n")
+        time.sleep(0.5)
+
+
+
+
+
+
+
+
+
+
+

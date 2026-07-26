@@ -1,0 +1,23 @@
+Flashcard Quiz V1
+
+Features
+- External flashcard documents
+- Index of all flashcard sets
+- Ability to add flashcard sets
+- Flashcard quizzes with custom question numbers
+- Quiz percentages and number correct
+- All additions are saved externally
+- Modular functions
+
+
+Concepts Learned
+- File input/output
+- Multiple functions
+- Dictionaries (initially)
+- Randomness
+- Program state
+- Dynamic file creation
+- Validation
+- Simple software architecture
+
+Date completed: 7-25-2026

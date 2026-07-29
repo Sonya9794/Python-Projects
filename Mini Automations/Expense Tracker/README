@@ -1,0 +1,18 @@
+Expense Tracker V1
+
+Features
+- Add expenses
+- View expense log
+- Generate spending summaries
+- Summarize by category
+- Export data to CSV
+
+Concepts Practiced
+- File I/O
+- Functions
+- Dictionaries
+- CSV module
+- Data aggregation
+- Input validation
+
+Date completed: 7-26-2026

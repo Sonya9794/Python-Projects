@@ -171,6 +171,8 @@ while not exit_main:
                 for line in data:
                     expense_data = line.strip().split("|")
                     writer.writerow(expense_data)
+    print("Data successfully exported to expense_data.csv!\n")
+    time.sleep(0.5)
 
 
 

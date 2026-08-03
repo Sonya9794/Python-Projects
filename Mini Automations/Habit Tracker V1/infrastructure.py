@@ -29,12 +29,12 @@ def uniqueness(input):
                 unique = False
     return unique
 
-def split_line(line_number):
+"""def split_line(line_number):
     with open(habits_data_path) as habits_data:
         for i, line in enumerate(habits_data):
             if i == int(line_number.strip().lower()):
                 data = line.split("|")
-                return data
+                return data"""
 
 
 

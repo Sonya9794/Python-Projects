@@ -2,13 +2,14 @@ import time
 
 import actions
 import infrastructure
+import habit_statistics
 
-exit = False
+exit_loop = False
 
-while not exit:
+while not exit_loop:
     print("A. Create a new habit")
     print("B. Log a completed habit for today")
-    print("C. View current habits")
+    print("C. View list of current habits")
     print("D. See statistics")
     print("E. Exit")
 
@@ -21,7 +22,11 @@ while not exit:
         infrastructure.print_habit_list()
         print("Other (enter name below)")
         completed_habit = input("Which of your habits did you complete?: ").strip().lower()
-
         actions.log_today(completed_habit)
+    elif requested_action == 'c':
+        print("Here's your list of habits:")
+        infrastructure.print_habit_list()
+    elif requested_action == 'd':
+        habit_statistics.streaks()
 
-    exit = True
+    exit_loop = True

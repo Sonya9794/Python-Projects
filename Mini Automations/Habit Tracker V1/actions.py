@@ -8,9 +8,9 @@ habit_list_path = os.path.join(os.path.dirname(__file__), 'habits_list.txt')
 habit_data_path = os.path.join(os.path.dirname(__file__), 'habits_data.txt')
 
 def add_habit():
-    exit = False
+    exit_loop = False
 
-    while not exit:
+    while not exit_loop:
         habit_name = input("What habit would you like to create?: ").strip().lower()
 
         if infrastructure.uniqueness(habit_name) == False:
@@ -19,7 +19,7 @@ def add_habit():
             try_again = input("Do you still want to add a habit (Y/N)?: ").strip().lower()
 
             if not try_again == 'y':
-                exit = True
+                exit_loop = True
                 print("Returning to menu.")
                 time.sleep(0.5)
 
@@ -27,7 +27,7 @@ def add_habit():
             with open(habit_list_path, 'a') as habit_list:
                 habit_list.write(f"{habit_name}\n")
                 print(f"{habit_name.capitalize()} has been added to your list of habits!")
-                exit = True
+                exit_loop = True
 
 
 def log_today(habit):

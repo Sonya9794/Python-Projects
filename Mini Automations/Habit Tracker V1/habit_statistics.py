@@ -11,10 +11,8 @@ def streaks():
     longest_streak = 0
     longest_habit = "None"
 
-    current_date = datetime.date.today()
-    previous_date = datetime.date.today()
-
     done_today = False
+    habits_done = 0
 
     print("\nHere are your current streaks for each of your goals!")
     time.sleep(0.5)
@@ -22,18 +20,22 @@ def streaks():
 
     with open(habit_list_path) as habit_list:
         habits = habit_list.read().splitlines()
+        total_habits = len(habits)
 
 
     with open(habit_data_path) as habit_data:
         raw_data = habit_data.read().splitlines()
 
         for habit in habits:
+            current_date = datetime.date.today()
+            previous_date = datetime.date.today()
+
             current_streak = 0
-            data_lines = raw_data
+            data_lines = raw_data.copy()
             done_today = False
 
-            if infrastructure.get_last_date() == str(current_date):
-                if habit in infrastructure.get_last_line():
+            if str(infrastructure.get_last_date()) == str(current_date):
+                if habit.strip() in infrastructure.get_last_line().split("|"):
                     done_today = True
                 
                 data_lines.pop()
@@ -50,10 +52,6 @@ def streaks():
 
                 if habit.strip() in data and difference.days == 1:
                     current_streak += 1
-
-                elif habit.strip() in data:
-                    current_streak += 1
-                    break
                     
                 else:
                     break
@@ -61,6 +59,7 @@ def streaks():
             if done_today == True:
                 current_streak += 1
                 message = "(done today)"
+                habits_done += 1
             else:
                 message = "(not done today)"
 
@@ -74,6 +73,7 @@ def streaks():
         time.sleep(0.4)
         print(f"\nYour longest commitment has been to {longest_habit}, which you've done for {longest_streak} days!")
         time.sleep(0.5)
+        print(f"You have completed {habits_done} of your {total_habits} habits today.")
 
         
 

@@ -73,7 +73,8 @@ def streaks():
         time.sleep(0.4)
         print(f"\nYour longest commitment has been to {longest_habit}, which you've done for {longest_streak} days!")
         time.sleep(0.5)
-        print(f"You have completed {habits_done} of your {total_habits} habits today.")
+        print(f"\nYou have completed {habits_done} of your {total_habits} habits today.\n")
+        time.sleep(0.5)
 
         
 

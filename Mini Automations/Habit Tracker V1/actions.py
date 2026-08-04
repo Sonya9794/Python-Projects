@@ -53,3 +53,37 @@ def log_today(habit):
         else:
             with open(habit_data_path, 'a') as habit_data:
                 habit_data.write(f"\n{date}|{habit}")
+
+
+def delete_habit():
+    exit_loop = False
+
+    while not exit_loop:
+        print("Here's your list of habits:")
+        time.sleep(0.5)
+        print()
+        infrastructure.print_habit_list()
+        time.sleep(0.5)
+        habit_name = input("\nWhich habit would you like to delete?: ").strip().lower()
+
+        if infrastructure.uniqueness(habit_name) == True or habit_name == '\n':
+            print("Invalid input! You are not currently tracking this habit.")
+            time.sleep(0.5)
+            try_again = input("Do you still want to delete a habit (Y/N)?: ").strip().lower()
+
+            if not try_again == 'y':
+                exit_loop = True
+                print("Returning to menu.")
+                time.sleep(0.5)
+
+        else:
+            with open(habit_list_path) as habit_list:
+                lines = habit_list.readlines()
+
+            with open(habit_list_path, 'w') as habit_list:
+                for line in lines:
+                    if line.strip() != habit_name:
+                        habit_list.write(line)
+
+            print(f"{habit_name.capitalize()} has been deleted from your list of habits.")
+            exit_loop = True

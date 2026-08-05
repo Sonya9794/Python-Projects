@@ -1,0 +1,19 @@
+Habit Tracker V1
+
+Features
+- Create and delete habits
+- Log daily completion, and store habit data
+- Prevents duplicate logs
+- Persistent storage
+- Current streaks and longest streak
+- Daily completion summary
+- Multiple source files
+- Reusable infrastructure
+
+Concepts Learned
+- Datetime
+- Modules
+- Algorithms
+- Software organization
+- Multiple source files
+- Mutable objects

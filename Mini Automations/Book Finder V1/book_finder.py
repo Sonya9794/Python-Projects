@@ -1,0 +1,45 @@
+import requests
+import time
+
+requested_api = input("Would you like to search by title, author, or ISBN?: ").strip().lower()
+
+if requested_api == 'title':
+    requested_title = input("Enter the title you're looking for: ").strip()
+    url = f"https://openlibrary.org/search.json?title={requested_title}"
+elif requested_api == 'author':
+    requested_author = input("Enter the author you're looking for: ").strip()
+    url = f"https://openlibrary.org/search.json?author={requested_author}"
+elif requested_api == 'isbn':
+    requested_isbn = input("Enter the ISBN number you're looking for: ").strip()
+    url = f"https://openlibrary.org/search.json?isbn={requested_isbn}"
+
+query_params = {
+    "limit": 5,
+    "fields": "title, author_name, first_publish_year,subject"
+}
+
+headers = {
+    "User-Agent": "Personal practice (singhsonya2008@gmail.com)"
+}
+
+response = requests.get(url, headers=headers, params=query_params) #requests the data in json format from the API
+data = response.json() #converts response into python dictionary
+
+print("\nHere's what we found!\n")
+time.sleep(0.5)
+
+for i, book in enumerate(data["docs"]):
+    print("-----------------")
+    print(f"{i+1}. Title: {book['title']}\nAuthor: {book['author_name']}")
+    time.sleep(0.1)
+
+print("-----------------\n")
+
+selection = int(input("Type a result's number to view more information, or type 0 to exit: ").strip())
+
+if selection-1 not in range(5):
+    None
+else:
+    selection -= 1
+    book = data["docs"][selection]
+    print(f"\n{selection+1}. Title: {book['title']}\nAuthor:{book['author_name']}\nSubjects: {book['subject'][1]}, {book['subject'][2]}, {book['subject'][3]}\nPublish Year: {book['first_publish_year']}")

@@ -1,5 +1,22 @@
 import requests
 import time
+import os
+
+favorites_path = os.path.join(os.path.dirname(__file__), 'favorite_books.txt')
+
+if not os.path.exists(favorites_path):
+    with open(favorites_path, 'x'):
+        None
+
+
+def add_favorite(book):
+    request = input("Add this book to your favorites list (Y/N): ").strip().lower()
+
+    if request == 'y':
+        with open(favorites_path, 'w') as favorite_books:
+            favorite_books.write(f"{book['title']} by {", ".join(book['author_name'])}\n")
+
+
 
 requested_api = input("Would you like to search by title, author, or ISBN?: ").strip().lower()
 
@@ -42,4 +59,7 @@ if selection-1 not in range(5):
 else:
     selection -= 1
     book = data["docs"][selection]
-    print(f"\n{selection+1}. Title: {book['title']}\nAuthor:{book['author_name']}\nSubjects: {book['subject'][1]}, {book['subject'][2]}, {book['subject'][3]}\nPublish Year: {book['first_publish_year']}")
+    print(f"\n{selection+1}. Title: {book['title']}\nAuthor:{", ".join(book['author_name'])}\nSubjects: {book['subject'][1]}, {book['subject'][2]}, {book['subject'][3]}\nPublish Year: {book['first_publish_year']}\n")
+
+    add_favorite(book)
+    
